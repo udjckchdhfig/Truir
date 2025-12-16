@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ɋƀ | Боты и скрипты</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --purple: #8a2be2;
+            --purple-dark: #4b0082;
+            --purple-light: #b366ff;
+            --purple-transparent: rgba(138, 43, 226, 0.1);
+            --black: #0a0a0a;
+            --black-light: #1a1a1a;
+            --white: #ffffff;
+            --gray: #333333;
+            --gray-light: #555555;
+            --green: #00ff88;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            padding-bottom: 70px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+
+    /* Фон з маленькими логотипами у сітці */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial, sans-serif' font-weight='900' font-size='60' fill='rgba(138, 43, 226, 0.08)'%3Eɋƀ%3C/text%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 120px 120px; /* розмір клітинки з відступом */
+        background-position: 0 0;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 2; /* трохи видніше */
+        transform: rotate(-5deg); /* легкий нахил для стилю */
+    }
+
+    /* Додаткові логотипи по краях */
+    body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.05) 0%, transparent 25%),
+            radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.05) 0%, transparent 25%),
+            radial-gradient(circle at 50% 50%, transparent 0%, rgba(10, 10, 10, 0.8) 80%);
+        pointer-events: none;
+        z-index: -1;
+        backdrop-filter: blur(3px);
+    }
+
+        
+
+
+    /* Шапка - менша та закруглена */
+    .header {
+        background: linear-gradient(135deg, var(--purple-dark) 0%, var(--black) 100%);
+        padding: 18px 15px 22px 15px; /* top right bottom left */
+        text-align: center;
+        position: relative;
+        border-radius: 0 0 25px 25px; /* тільки нижні кути */
+        margin: 0;
+        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.25);
+        border-top: none; /* немає верхньої рамки */
+        border-left: none;
+        border-right: none;
+        border-bottom: 2px solid var(--purple);
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            ellipse at top center,
+            rgba(179, 102, 255, 0.1) 0%,
+            transparent 70%
+        );
+        border-radius: 0 0 25px 25px;
+        pointer-events: none;
+    }
+
+    .logo {
+        font-size: 34px;
+        font-weight: 900;
+        margin-bottom: 6px;
+        background: linear-gradient(90deg, var(--purple-light), var(--white));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 10px rgba(179, 102, 255, 0.4);
+        position: relative;
+        z-index: 2;
+    }
+
+    .slogan {
+        font-size: 12px;
+        color: var(--purple-light);
+        opacity: 0.9;
+        letter-spacing: 1.5px;
+        font-weight: 500;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 2;
+    }
+
+
+        
+        /* Контент */
+        .content {
+            padding: 20px 15px;
+        }
+        
+        /* Карточки послуг */
+        .service-card {
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--gray);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .service-card:hover {
+            border-color: var(--purple);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.2);
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .service-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .service-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--purple-light);
+        }
+        
+        .service-description {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .price-details {
+            display: flex;
+            gap: 15px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--gray-light);
+        }
+        
+        .price-details span {
+            background: rgba(138, 43, 226, 0.1);
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+        
+        /* Групи послуг */
+        .service-group {
+            margin-bottom: 25px;
+        }
+        
+        .group-title {
+            font-size: 22px;
+            color: var(--purple-light);
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 3px solid var(--purple);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Головна сторінка */
+        .welcome-box {
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid var(--purple);
+        }
+        
+        .welcome-title {
+            font-size: 24px;
+            color: var(--purple-light);
+            margin-bottom: 15px;
+        }
+        
+        .welcome-text {
+            color: #ddd;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--purple-light);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-light);
+            margin-top: 5px;
+        }
+        
+        /* Інформаційна сторінка */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .contact-item:hover {
+            border-color: var(--purple);
+            background: rgba(138, 43, 226, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .contact-icon {
+            font-size: 22px;
+            color: var(--purple-light);
+            width: 40px;
+            text-align: center;
+        }
+        
+        .contact-text {
+            flex: 1;
+        }
+        
+        .contact-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .contact-desc {
+            font-size: 13px;
+            color: var(--gray-light);
+        }
+
+    .contact-desc {
+        font-size: 13px;
+        color: var(--gray-light);
+    }
+    
+    /* ====== ДОДАЙ ОТУТ ====== */
+    .page {
+        display: none;
+        animation: fadeIn 0.4s ease;
+    }
+    
+    .page.active {
+        display: block;
+    }
+
+    /* Підказка з матовим ефектом */
+    .hint {
+        text-align: center;
+        font-size: 12px;
+        color: var(--purple-light);
+        margin-top: 25px;
+        padding: 15px;
+        border-top: 1px solid rgba(138, 43, 226, 0.3);
+        background: rgba(26, 26, 26, 0.7);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(138, 43, 226, 0.2);
+        line-height: 1.5;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    /* ====== КІНЕЦЬ ДОДАНОГО КОДУ ====== */
+
+    /* Нижнє меню - менше та стильне */
+    .bottom-menu {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--black-light);
+        display: flex;
+        padding: 10px 8px 12px 8px;
+        border-top: 1px solid var(--gray);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--white);
+        padding: 8px 3px;
+        font-size: 12px;
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border-radius: 0;
+        position: relative;
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Ефект при наведенні */
+    .menu-btn:hover {
+        background: transparent;
+    }
+
+    .menu-btn:hover i,
+    .menu-btn:hover span {
+        color: var(--purple-light);
+    }
+
+    /* Активна кнопка - підсвітка лише значку та тексту */
+    .menu-btn.active {
+        background: transparent;
+    }
+
+    .menu-btn.active i {
+        color: var(--purple-light);
+        text-shadow: 0 0 15px rgba(179, 102, 255, 0.7);
+        transform: scale(1.1);
+        transition: all 0.3s;
+    }
+
+    .menu-btn.active span {
+        color: var(--purple-light);
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    /* Індикатор активної кнопки (нижня лінія) */
+    .menu-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 24px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--purple-light), var(--purple));
+        border-radius: 3px;
+        box-shadow: 0 0 10px rgba(179, 102, 255, 0.5);
+    }
+
+    .menu-btn i {
+        font-size: 18px;
+        color: var(--gray-light);
+        transition: all 0.3s;
+    }
+
+    .menu-btn span {
+        transition: all 0.3s;
+        color: var(--gray-light);
+    }
+
+    /* Адаптивність */
+    @media (max-width: 480px) {
+        .bottom-menu {
+            padding: 8px 6px 10px 6px;
+        }
+        
+        .menu-btn {
+            font-size: 11px;
+            padding: 6px 2px;
+        }
+        
+        .menu-btn i {
+            font-size: 16px;
+        }
+        
+        .menu-btn.active::after {
+            width: 20px;
+            height: 2px;
+            bottom: -10px;
+        }
+    }
+
+    </style>
+</head>
+<body>
+    <!-- Шапка з логотипом -->
+    <div class="header">
+        <div class="logo">ɋƀ</div>
+        <div class="slogan">КАЧЕСТВЕННЫЕ БОТЫ И СКРИПТЫ</div>
+    </div>
+    
+    <!-- Головна сторінка (Меню) -->
+    <div id="menuPage" class="page active">
+        <div class="content">
+            <div class="welcome-box">
+                <div class="welcome-title">🚀 Добро пожаловать в ɋƀ</div>
+                <div class="welcome-text">
+                    Создание, запуск и настройка Telegram-ботов на Python. 
+                    Готовые решения под ключ с гарантией качества и поддержкой.
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">готовых ботов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">клиентов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">99%</div>
+                        <div class="stat-label">успешных запусков</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="service-group">
+                <div class="group-title">
+                    <i class="fas fa-bolt"></i> Популярные скрипты/запуски
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">⭐ Задания от Flyer</div>
+                        <div class="service-price">от 23$</div>
+                    </div>
+                    <div class="service-description">
+                        Автоматизация заданий Flyer с доходом от 2$/день.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">🤖 Авто-обменик</div>
+                        <div class="service-price">от 5$</div>
+                    </div>
+                    <div class="service-description">
+                        Автоматический обмен звёзд с интеграцией Flyer и крипто-платежами.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">🔧 Реф-бот с админкой</div>
+                        <div class="service-price">от 3$</div>
+                    </div>
+                    <div class="service-description">
+                        Реферальный бот с продвинутой админ-панелью, статистикой и выплатами.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Сторінка прайс-листу -->
+    <div id="pricePage" class="page">
+        <div class="content">
+            <div class="service-group">
+                <div class="group-title">
+                    <i class="fas fa-tags"></i> Полный прайс-лист
+                </div>
+                
+                <!-- Базовые боты -->
+                <div style="margin-bottom: 25px; padding-left: 15px;">
+                    <div style="color: var(--purple-light); margin-bottom: 15px; font-size: 18px;">
+                        <i class="fas fa-robot"></i> Базовые боты
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Реф-бот</div>
+                            <div class="service-price">от 3$</div>
+                        </div>
+                        <div class="service-description">
+                            Реферальный бот с хорошей админкой
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 3$ + 1$/мес</span>
+                            <span>Скрипт: 5$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Кликер</div>
+                            <div class="service-price">от 2$</div>
+                        </div>
+                        <div class="service-description">
+                            Обычный кликер бот
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 2$ + 1$/мес</span>
+                            <span>Скрипт: 4$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Обратная связь</div>
+                            <div class="service-price">от 1$</div>
+                        </div>
+                        <div class="service-description">
+                            Обратная связь с админкой и тикетами
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 1$ + 0.5$/мес</span>
+                            <span>Скрипт: 3$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Звёздный бот</div>
+                            <div class="service-price">от 3$</div>
+                        </div>
+                        <div class="service-description">
+                            Бот со звёздами + проверка номера
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 3$ + 1$/мес</span>
+                            <span>Скрипт: 5$</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Продвинутые решения -->
+                <div style="margin-bottom: 25px; padding-left: 15px;">
+                    <div style="color: var(--purple-light); margin-bottom: 15px; font-size: 18px;">
+                        <i class="fas fa-rocket"></i> Продвинутые решения
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Обменик ручной</div>
+                            <div class="service-price">от 5$</div>
+                        </div>
+                        <div class="service-description">
+                            Обычный ручной обменик
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 5$ + 1$/мес</span>
+                            <span>Скрипт: 8$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Гарант бот</div>
+                            <div class="service-price">от 5$</div>
+                        </div>
+                        <div class="service-description">
+                            Гарант бот для сделок
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 5$ + 1$/мес</span>
+                            <span>Скрипт: 9$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Турнир бот</div>
+                            <div class="service-price">от 5$</div>
+                        </div>
+                        <div class="service-description">
+                            Турнир бот для разных игр
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 5$ + 1$/мес</span>
+                            <span>Скрипт: 9$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Реф бот Flyer</div>
+                            <div class="service-price">от 4$</div>
+                        </div>
+                        <div class="service-description">
+                            Реферальный бот с интеграцией Flyer
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 4$ + 1$/мес</span>
+                            <span>Скрипт: 7$</span>
+                        </div>
+                    </div>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">Креатор-Бот</div>
+                        <div class="service-price">15$</div>
+                    </div>
+                    <div class="service-description">
+                        Бот менеджер для создания других ботов.
+                        </div>
+                        <div class="price-details">
+                            <span>Скрипт: 15$</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">User-Бот</div>
+                        <div class="service-price">10$</div>
+                    </div>
+                    <div class="service-description">
+                        Авто-рассылка по группам + управление в боте.
+                        </div>
+                        <div class="price-details">
+                            <span>Скрипт: 10$</span>
+                    </div>
+                </div>
+
+                </div>
+                
+                <!-- Автоматизация -->
+                <div style="margin-bottom: 25px; padding-left: 15px;">
+                    <div style="color: var(--purple-light); margin-bottom: 15px; font-size: 18px;">
+                        <i class="fas fa-cogs"></i> Автоматизация
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Авто обменик</div>
+                            <div class="service-price">от 5$</div>
+                        </div>
+                        <div class="service-description">
+                            Обмен звёзд на крипту + подписка Flyer
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 5$ + 1$/мес</span>
+                            <span>Скрипт: 10$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Задания от Flyer</div>
+                            <div class="service-price">от 23$</div>
+                        </div>
+                        <div class="service-description">
+                            Авто-задания Flyer, доход 2$+/день
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 23$ + 2$/мес</span>
+                            <span>Скрипт: 35$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">Авто накрутка + Flyer</div>
+                            <div class="service-price">от 30$</div>
+                        </div>
+                        <div class="service-description">
+                            Авто-накрутка + задания Flyer
+                        </div>
+                        <div class="price-details">
+                            <span>Запуск + хостинг: 30$ + 4$/мес</span>
+                            <span>Скрипт: 45$</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Другие услуги -->
+                <div style="padding-left: 15px;">
+                    <div style="color: var(--purple-light); margin-bottom: 15px; font-size: 18px;">
+                        <i class="fas fa-code"></i> Другие услуги
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-name">🔑 Под ключ</div>
+                            <div class="service-price">от 5$</div>
+                        </div>
+                        <div class="service-description">
+                            Создание качественного бота под заказ.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hint">
+                💜 Все цены указаны за базовую версию. Индивидуальная настройка обсуждается отдельно.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Сторінка інформації -->
+    <div id="infoPage" class="page">
+        <div class="content">
+            <div class="service-group">
+                <div class="group-title">
+                    <i class="fas fa-address-card"></i> Контакты
+                </div>
+                
+                <a href="https://t.me/quyfa" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-title">Telegram</div>
+                        <div class="contact-desc">Основной канал связи @quyfa</div>
+                    </div>
+                    <i class="fas fa-external-link-alt" style="color: var(--gray-light);"></i>
+                </a>
+                
+                <a href="https://t.me/quyfa" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-title">Бот поддержки</div>
+                        <div class="contact-desc">Техподдержка и заказы @quyfa</div>
+                    </div>
+                    <i class="fas fa-external-link-alt" style="color: var(--gray-light);"></i>
+                </a>
+                
+                <a href="https://t.me/quyfa" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-title">Канал обновлений</div>
+                        <div class="contact-desc">Новые боты и обновления @quyfa</div>
+                    </div>
+                    <i class="fas fa-external-link-alt" style="color: var(--gray-light);"></i>
+                </a>
+                
+                <a href="mailto:хуй_а_не_имейл.com" class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-title">Email</div>
+                        <div class="contact-desc">Для официальных запросов хуй_а_не_имейл.com</div>
+                    </div>
+                    <i class="fas fa-external-link-alt" style="color: var(--gray-light);"></i>
+                </a>
+            </div>
+            
+            <div class="service-group">
+                <div class="group-title">
+                    <i class="fas fa-shield-alt"></i> Гарантии
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">✅ Гарантия работы</div>
+                    </div>
+                    <div class="service-description">
+                        Все боты тестируются перед передачей. Помощь запуска от техподдержки.
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">🔄 Бесплатные правки</div>
+                    </div>
+                    <div class="service-description">
+                        Незначительные правки в течение 7 дней после покупки.
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-name">💬 Техподдержка</div>
+                    </div>
+                    <div class="service-description">
+                        Консультации и помощь с настройкой в течение месяца.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hint">
+                💬 Пишите в Telegram для быстрого ответа. Отвечаем в течение 15-30 минут.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Нижнє меню (менше) -->
+    <div class="bottom-menu">
+        <button class="menu-btn" onclick="openPage('pricePage', this)">
+            <i class="fas fa-tags"></i>
+            <span>Прайс</span>
+        </button>
+        
+        <button class="menu-btn active" onclick="openPage('menuPage', this)">
+            <i class="fas fa-home"></i>
+            <span>Главная</span>
+        </button>
+        
+        <button class="menu-btn" onclick="openPage('infoPage', this)">
+            <i class="fas fa-info-circle"></i>
+            <span>Контакты</span>
+        </button>
+    </div>
+    
+    <script>
+        // Функція відкриття сторінок
+        function openPage(pageId, clickedBtn = null) {
+            // Приховати всі сторінки
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Показати вибрану сторінку
+            document.getElementById(pageId).classList.add('active');
+            
+            // Зняти активний клас з усіх кнопок
+            document.querySelectorAll('.menu-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Додати активний клас до натиснутої кнопки
+            if (clickedBtn) {
+                clickedBtn.classList.add('active');
+            }
+            
+            // Прокрутити вгору
+            window.scrollTo(0, 0);
+        }
+        
+        // Ініціалізація Telegram WebApp
+        function initTelegramApp() {
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                Telegram.WebApp.expand();
+                Telegram.WebApp.setHeaderColor('#4b0082');
+                Telegram.WebApp.setBackgroundColor('#0a0a0a');
+            }
+        }
+        
+        // Запуск при завантаженні
+        document.addEventListener('DOMContentLoaded', function() {
+            initTelegramApp();
+            console.log('ɋƀ Mini App запущен!');
+        });
+    </script>
+</body>
+</html>
